@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Shared\SuperHeroDB.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
