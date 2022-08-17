@@ -1,0 +1,54 @@
+﻿@page "/superhero/{id:int}"
+@inject ISuperHeroService isuperHeroService
+
+
+<h3>Ma nouvelle page SuperHeros</h3>
+
+
+@if (hero.Id == default)
+{
+    <span>Loading Super Hero...</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Hero Name</th>
+                <th>Comic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="@couleur">
+                <td>@hero.FirstName</td>
+                <td>@hero.LastName</td>
+                <td>@hero.HeroName</td>
+                <td>@hero.Comic.Name</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    SuperHeroDB.Shared.SuperHero hero = new SuperHeroDB.Shared.SuperHero();
+    private string couleur => hero.Id == 1 ? "couleur-vive" : "couleur-vive2";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        hero = await isuperHeroService.GetSuperById(Id);
+    }
+
+}
+
+
+
+<h3>SuperHero</h3>
+
+@code {
+
+}

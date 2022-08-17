@@ -13,9 +13,15 @@ namespace SuperHeroDB.Client.Services
         private readonly HttpClient _httpClient;
 
         public SuperHeroService(HttpClient httpClient)
-        {
+        { 
             this._httpClient = httpClient;
         }
+
+        public async Task<SuperHero> GetSuperById(int id)
+        {
+            return await _httpClient.GetFromJsonAsync<SuperHero>($"api/superhero/{id}");
+        }
+
         public async Task<List<SuperHero>> GetSuperHeros()
         {
             return await _httpClient.GetFromJsonAsync<List<SuperHero>>("api/superhero");

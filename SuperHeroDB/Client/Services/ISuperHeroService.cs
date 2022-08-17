@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SuperHeroDB.Client.Services
 {
-    interface ISuperHeroService
+    public interface ISuperHeroService
     {
-        Task<List<SuperHero>> GetSuperHeros();
+       Task<List<SuperHero>> GetSuperHeros();
+
+        Task<SuperHero> GetSuperById(int id);
     }
 }

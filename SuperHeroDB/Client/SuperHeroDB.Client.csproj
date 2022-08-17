@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Shared\SuperHeroDB.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>
