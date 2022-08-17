@@ -1,0 +1,66 @@
+﻿@inject ISuperHeroService superHeroService
+@*@inject IJSInProcessRuntime JSRuntime*@
+
+<h3>EditSuperHero</h3>
+
+<EditForm Model="Hero" OnSubmit="HandleSubmit">
+    <div class="form-group">
+        <label>First Name</label>
+        <InputText @bind-Value="Hero.FirstName" class="form-control" PlaceHolder="First Name"></InputText>
+    </div>
+    <div class="from-group">
+        <label>Last Name</label>
+        <InputText @bind-Value="Hero.LastName" class="form-control" PlaceHolder="Last Name"></InputText>
+    </div>
+    <div class="from-group">
+        <label>Hero Name</label>
+        <InputText @bind-Value="Hero.HeroName" class="form-control" PlaceHolder="Hero Name"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Comic</label> <br />
+        <InputRadioGroup @bind-Value="Comic_Id" class="form-control">
+            @foreach (var c in superHeroService.Comics)
+            {
+                <InputRadio Value="@c.Id"/> <span style="padding-left: 5px;">@c.Name</span> <br />
+            }
+        </InputRadioGroup>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code 
+{
+    [Parameter]
+    public int Id { get; set; }
+    int Comic_Id = 0;
+    public SuperHeroDB.Shared.SuperHero Hero { get; set; } = new SuperHero();
+    protected override async Task OnInitializedAsync()
+    {
+        await superHeroService.GetComics();
+    }
+
+    void HandleSubmit()
+    {
+        Console.WriteLine("Submit was called!");
+        Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);
+        Hero.Id = Id +1;
+        Console.WriteLine(Hero.ToString());
+        @*JSRuntime.InvokeVoidAsync("console.log", Hero);*@
+    }
+}
+
+
+
+@*<EditForm Model="Hero" OnSubmit="HandleSubmit">
+        <InputText @bind-Value="Hero.FirstName" class="form-control" PlaceHolder="First Name"></InputText>
+        <InputText @bind-Value="Hero.LastName" class="form-control" PlaceHolder="Last Name"></InputText>
+        <InputText @bind-Value="Hero.HeroName" class="form-control" PlaceHolder="Hero Name"></InputText>
+        <InputRadioGroup @bind-Value="Hero.Comic" class="form-control">
+            @foreach (var comic in superHeroService.Comics)
+            {
+                <InputRadio Value="@comic.Id"> <span style="padding-left: 5px;">@comic.Name</span> </InputRadio>
+            }
+        </InputRadioGroup>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>*@

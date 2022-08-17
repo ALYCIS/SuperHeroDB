@@ -5,7 +5,7 @@
 <h3>Ma nouvelle page SuperHeros</h3>
 
 
-@if (hero.Id == default)
+@if (hero ==null || hero.Id == default)
 {
     <span>Loading Super Hero...</span>
 }
@@ -13,7 +13,7 @@ else
 {
     <table class="table">
         <thead>
-            <tr>
+            <tr colspan="2" class="bg-success">
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Hero Name</th>
@@ -23,7 +23,7 @@ else
         <tbody>
             <tr id="@couleur">
                 <td>@hero.FirstName</td>
-                <td>@hero.LastName</td>
+                <td>@hero.LastName</td> 
                 <td>@hero.HeroName</td>
                 <td>@hero.Comic.Name</td>
             </tr>
@@ -40,7 +40,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        hero = await isuperHeroService.GetSuperById(Id);
+        hero = await isuperHeroService.GetSuperHeroById(Id);
     }
 
 }

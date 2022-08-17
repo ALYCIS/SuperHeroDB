@@ -14,16 +14,28 @@ namespace SuperHeroDB.Server.Controllers
     {
         static List<Comic> comics = new List<Comic>
         {
-            new Comic{Name="Marvel", Id=0},
-            new Comic{Name="DC", Id=1}
+            new Comic{Name="Marvel", Id=1},
+            new Comic{Name="DC", Id=2}
 
         };
 
-        List<SuperHero> heros = new List<SuperHero>
+        public List<SuperHero> heros = new List<SuperHero>
         {
             new SuperHero{Id=1,FirstName="Peter", LastName="Parker", HeroName="Spiderman", Comic=comics[0]},
             new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", Comic=comics[1]}
         };
+
+        [HttpGet("comics")]
+        public IActionResult GetComics()
+        {
+            return Ok(comics);
+        }
+
+        [HttpGet("comics/{id:int}")]
+        public IActionResult GetComicById(int Id)
+        {
+            return Ok(comics.FirstOrDefault(c=>c.Id==Id));
+        }
 
         [HttpGet]
         public IActionResult GetSuperHeros()
@@ -40,6 +52,13 @@ namespace SuperHeroDB.Server.Controllers
                 return NotFound("Super Hero wasn't found. Too bad. :(");
             }
             return Ok(hero);
+        }
+        [HttpPost]
+        public IActionResult CreateSuperHero(SuperHero hero)
+        {
+            hero.Id = heros.Max(h => h.Id + 1);
+            heros.Add(hero);
+            return Ok(heros);
         }
     }
 }

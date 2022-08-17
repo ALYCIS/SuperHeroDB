@@ -13,5 +13,10 @@ namespace SuperHeroDB.Shared
         public string LastName { get; set; }
         public string HeroName { get; set; }
         public Comic Comic { get; set; }
+
+        public override string ToString()
+        {
+            return Id.ToString()+"/"+FirstName+"/"+LastName+"/"+HeroName+"/Comic = "+Comic.ToString();
+        }
     }
 }
