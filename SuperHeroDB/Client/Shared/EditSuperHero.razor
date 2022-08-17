@@ -31,8 +31,8 @@
 
 @code 
 {
-    [Parameter]
-    public int Id { get; set; }
+    @*[Parameter]
+    public int Id { get; set; }*@
     int Comic_Id = 0;
     public SuperHeroDB.Shared.SuperHero Hero { get; set; } = new SuperHero();
     protected override async Task OnInitializedAsync()
@@ -40,12 +40,14 @@
         await superHeroService.GetComics();
     }
 
-    void HandleSubmit()
+    async void HandleSubmit()
     {
         Console.WriteLine("Submit was called!");
         Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);
-        Hero.Id = Id +1;
+        @*Hero.Id = Id +1;*@
         Console.WriteLine(Hero.ToString());
+        await superHeroService.CreateSuperHero(Hero);
+
         @*JSRuntime.InvokeVoidAsync("console.log", Hero);*@
     }
 }

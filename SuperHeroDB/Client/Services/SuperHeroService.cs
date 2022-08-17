@@ -18,12 +18,13 @@ namespace SuperHeroDB.Client.Services
         }
 
         public List<Comic> Comics { get; set; } = new List<Comic>();
+        public List<SuperHero> Heroes { get; set; } = new List<SuperHero>();
 
         public async Task<List<SuperHero>> CreateSuperHero(SuperHero hero)
         {
             var result =  await _httpClient.PostAsJsonAsync<SuperHero>("api/superhero",hero);
-            var heros = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
-            return heros;
+            Heroes = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+            return Heroes;
         }
 
         public async Task<Comic> GetComicById(int id)
@@ -43,7 +44,8 @@ namespace SuperHeroDB.Client.Services
 
         public async Task<List<SuperHero>> GetSuperHeros()
         {
-            return await _httpClient.GetFromJsonAsync<List<SuperHero>>("api/superhero");
+            Heroes = await _httpClient.GetFromJsonAsync<List<SuperHero>>("api/superhero");
+            return Heroes;
         }
     }
 }

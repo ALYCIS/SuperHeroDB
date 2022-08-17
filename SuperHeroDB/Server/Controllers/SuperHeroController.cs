@@ -19,7 +19,7 @@ namespace SuperHeroDB.Server.Controllers
 
         };
 
-        public List<SuperHero> heros = new List<SuperHero>
+        static public List<SuperHero> heros = new List<SuperHero>
         {
             new SuperHero{Id=1,FirstName="Peter", LastName="Parker", HeroName="Spiderman", Comic=comics[0]},
             new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", Comic=comics[1]}

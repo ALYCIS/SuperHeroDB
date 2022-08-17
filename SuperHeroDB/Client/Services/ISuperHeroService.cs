@@ -9,6 +9,7 @@ namespace SuperHeroDB.Client.Services
     public interface ISuperHeroService
     {
         public List<Comic> Comics { get; set; }
+        public List<SuperHero> Heroes { get; set; }
         Task<List<SuperHero>> GetSuperHeros();
         Task GetComics();
         Task<SuperHero> GetSuperHeroById(int id);
