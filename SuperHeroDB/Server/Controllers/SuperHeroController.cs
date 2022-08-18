@@ -60,5 +60,32 @@ namespace SuperHeroDB.Server.Controllers
             heros.Add(hero);
             return Ok(heros);
         }
+        [HttpPut("{id}")]
+        public IActionResult UpdateSuperHero(SuperHero hero, int id)
+        {
+            var Dbhero = heros.FirstOrDefault(h => h.Id == id);
+            if (Dbhero == null)
+            {
+                return NotFound("Super Hero wasn't found. Too bad. :(");
+            }
+            var indexe = heros.IndexOf(Dbhero);
+            heros[indexe] = hero;
+            return Ok(heros);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteSuperHero(int id)
+        {
+            var Dbhero = heros.FirstOrDefault(h => h.Id == id);
+            if (Dbhero == null)
+            {
+                return NotFound("Super Hero wasn't found. Too bad. :(");
+            }
+            var indexe = heros.IndexOf(Dbhero);
+            heros.RemoveAt(indexe);
+            _ = heros;
+            _ = heros;
+            return Ok(heros);
+        }
     }
 }

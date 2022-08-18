@@ -19,6 +19,9 @@ else
                 <th>Last Name</th>
                 <th>Hero Name</th>
                 <th>Comic</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -33,21 +36,37 @@ else
                     <td>
                         <button class="btn btn-info" @onclick="()=>ShowHero(hero.Id)">Show</button>
                     </td>
+                    <td>
+                        <button class="btn btn-outline-warning" @onclick="()=>EditHero(hero.Id)">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-danger" @onclick="()=>DeleteHero(hero.Id)">Del</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
     @*<EditSuperHero Id=heros.Count></EditSuperHero>*@
-    <EditSuperHero></EditSuperHero>
+    <EditSuperHero Hero="HeroToEdit"></EditSuperHero>
 }
 
 
 @code {
+    SuperHeroDB.Shared.SuperHero HeroToEdit = new SuperHeroDB.Shared.SuperHero();
     //List<SuperHeroDB.Shared.SuperHero> heros = new List<SuperHeroDB.Shared.SuperHero>();
     protected override async Task OnInitializedAsync()
     {
-        await superHeroService.GetSuperHeros();
+        _=await superHeroService.GetSuperHeros();
         superHeroService.OnChange += StateHasChanged;
+    }
+
+    void EditHero(int id)
+    {
+        HeroToEdit = superHeroService.Heroes.FirstOrDefault(h => h.Id == id);
+    }
+    async void DeleteHero(int id)
+    {
+        _=await superHeroService.DeleteSuperHero(id);
     }
 
     public void Dispose()
@@ -59,4 +78,5 @@ else
     {
         navigationManager.NavigateTo($"/superhero/{id}");
     }
+
 }
