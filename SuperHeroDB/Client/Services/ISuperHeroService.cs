@@ -8,6 +8,7 @@ namespace SuperHeroDB.Client.Services
 {
     public interface ISuperHeroService
     {
+        public event Action OnChange;
         public List<Comic> Comics { get; set; }
         public List<SuperHero> Heroes { get; set; }
         Task<List<SuperHero>> GetSuperHeros();

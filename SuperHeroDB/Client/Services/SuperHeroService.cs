@@ -20,10 +20,13 @@ namespace SuperHeroDB.Client.Services
         public List<Comic> Comics { get; set; } = new List<Comic>();
         public List<SuperHero> Heroes { get; set; } = new List<SuperHero>();
 
+        public event Action OnChange;
+
         public async Task<List<SuperHero>> CreateSuperHero(SuperHero hero)
         {
             var result =  await _httpClient.PostAsJsonAsync<SuperHero>("api/superhero",hero);
             Heroes = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+            OnChange.Invoke();
             return Heroes;
         }
 
