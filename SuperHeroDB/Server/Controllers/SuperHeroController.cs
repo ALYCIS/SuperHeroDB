@@ -82,9 +82,16 @@ namespace SuperHeroDB.Server.Controllers
                 return NotFound("Super Hero wasn't found. Too bad. :(");
             }
             var indexe = heros.IndexOf(Dbhero);
-            heros.RemoveAt(indexe);
-            _ = heros;
-            _ = heros;
+            try
+            {
+                heros.RemoveAt(indexe);
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e.Message);
+            }
+            
             return Ok(heros);
         }
     }
