@@ -16,6 +16,7 @@ namespace SuperHeroDB.Server.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Comic>().HasData(
                 new Comic { Id=1, Name="Marvel"},
                 new Comic { Id=2, Name="DC"}
