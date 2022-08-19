@@ -50,7 +50,12 @@ namespace SuperHeroDB.Client.Services
 
         public async Task<SuperHero> GetSuperHeroById(int id)
         {
-            return await _httpClient.GetFromJsonAsync<SuperHero>($"api/superhero/{id}");
+            SuperHero hero = await _httpClient.GetFromJsonAsync<SuperHero>($"api/superhero/{id}");
+            if(hero !=null)
+            {
+                return hero;
+            }
+            throw new Exception("Hero not fund !");
         }
 
         public async Task<List<SuperHero>> GetSuperHeros()
