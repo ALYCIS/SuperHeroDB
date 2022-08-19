@@ -1,14 +1,14 @@
 ﻿@inject ISuperHeroService superHeroService
 @*@inject IJSInProcessRuntime JSRuntime*@
 
-@if(Hero.Id==0)
+@if (Hero.Id == 0)
 {
- <p><b>Create New Hero</b> </p>
+    <p><b>Create New Hero</b> </p>
 }
 
 else
 {
-  <p>Edit @Hero.HeroName </p>
+    <p>Edit @Hero.HeroName </p>
 }
 
 <EditForm Model="Hero" OnSubmit="HandleSubmit">
@@ -19,7 +19,7 @@ else
     <div class="from-group">
         @*<label>Last Name</label>*@
         <InputText @bind-Value="Hero.LastName" class="form-control" PlaceHolder="Last Name"></InputText>
-    </div> 
+    </div>
     <div class="from-group">
         @*<label>Hero Name</label>*@ <br />
         <InputText @bind-Value="Hero.HeroName" class="form-control" PlaceHolder="Hero Name"></InputText>
@@ -35,7 +35,18 @@ else
     </div>
 
     <button type="submit" class="btn btn-success">Submit</button>
+    @if (IsModif == 1)
+    {
+        <MudAlert Severity="Severity.Success" Dense="true" Class="my-2 CssShadow" Height="10" Width="5px">Modifier avec succès</MudAlert>
+
+
+    }
+    else if (IsModif == 2)
+    {
+        <MudAlert Severity="Severity.Success" Dense="true" Class="my-2" Height="10">Créer avec succès</MudAlert>
+    }
 </EditForm>
+
 
 @code
 {
@@ -43,37 +54,46 @@ else
         public int Id { get; set; }*@
     @*[Parameter]
         public SuperHeroDB.Shared.SuperHero hero { get; set; }*@
-int Comic_Id = 1;
-[Parameter]
-public SuperHeroDB.Shared.SuperHero Hero { get; set; } = new SuperHeroDB.Shared.SuperHero();
-@*protected override async Task OnInitializedAsync()*@
-@*protected override async Task OnParametersSetAsync()*@
-protected override async Task OnParametersSetAsync()
-{
-    await superHeroService.GetComics();
-    Comic_Id = Hero.Comic.Id;
-}
-
-async void HandleSubmit()
-{
-    Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);
-    if (Hero.Id==0)
+    string CssShadow = "mud - elevation - 4 py - 8 px - 10 rounded white";
+    bool IsClick = false;
+    int IsModif = 0;
+    int Comic_Id = 1;
+    [Parameter]
+    public SuperHeroDB.Shared.SuperHero Hero { get; set; } = new SuperHeroDB.Shared.SuperHero();
+    @*protected override async Task OnInitializedAsync()*@
+    @*protected override async Task OnParametersSetAsync()*@
+    protected override async Task OnParametersSetAsync()
     {
-        Console.WriteLine("Création!");
-        await superHeroService.CreateSuperHero(Hero);
-        Console.WriteLine(Hero.ToString());
+        await superHeroService.GetComics();
+        Comic_Id = Hero.Comic.Id;
     }
-    else
+
+    async void HandleSubmit()
     {
-        Console.WriteLine("Modification!");
-        await superHeroService.UpdateSuperHero(Hero, Hero.Id);
-        @*Hero.Id = Id +1;*@   
-    Hero.Id = 0;    
-}
+        Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);
+
+        if (Hero.Id == 0)
+        {
+            Console.WriteLine("Création!");
+            await superHeroService.CreateSuperHero(Hero);
+            Console.WriteLine(Hero.ToString());
+            IsClick = false;
+            IsModif = 2;
+        }
+        else
+        {
+            Console.WriteLine("Modification!");
+            await superHeroService.UpdateSuperHero(Hero, Hero.Id);
+            @*Hero.Id = Id +1;*@
+            Hero.Id = 0;
+            IsClick = true;
+            IsModif = 1;
+        }
 
 
         @*JSRuntime.InvokeVoidAsync("console.log", Hero);*@
     }
+
 }
 
 

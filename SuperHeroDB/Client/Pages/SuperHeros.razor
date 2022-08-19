@@ -2,6 +2,7 @@
 @inject ISuperHeroService superHeroService
 @inject NavigationManager navigationManager
 @implements IDisposable
+@inject IJSRuntime JSRuntime
 
 <h3>Ma nouvelle page SuperHeros</h3>
 
@@ -40,7 +41,8 @@ else
                         <button class="btn btn-outline-warning" @onclick="()=>EditHero(hero.Id)">Edit</button>
                     </td>
                     <td>
-                        <button class="btn btn-outline-danger" @onclick="()=>DeleteHero(hero.Id)">Del</button>
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>DeleteHero(hero.Id)">Delete</MudButton>
+                       @* <MudChip>@state</MudChip>*@
                     </td>
                 </tr>
             }
@@ -52,21 +54,36 @@ else
 
 
 @code {
+    [Inject] private IDialogService DialogService { get; set; }
+
+    string state = "Message box hasn't been opened yet";
+
     SuperHeroDB.Shared.SuperHero HeroToEdit = new SuperHeroDB.Shared.SuperHero();
+    SuperHeroDB.Shared.SuperHero HVide = new SuperHeroDB.Shared.SuperHero();
+    List<SuperHero> LHVide = new List<SuperHero> { new SuperHero() };
     //List<SuperHeroDB.Shared.SuperHero> heros = new List<SuperHeroDB.Shared.SuperHero>();
     protected override async Task OnInitializedAsync()
     {
-        _=await superHeroService.GetSuperHeros();
+        _ = await superHeroService.GetSuperHeros();
         superHeroService.OnChange += StateHasChanged;
     }
 
-    void EditHero(int id)
+    async void EditHero(int id)
     {
         HeroToEdit = superHeroService.Heroes.FirstOrDefault(h => h.Id == id);
+
+        await JSRuntime.InvokeVoidAsync("console.log", HeroToEdit);
     }
     async void DeleteHero(int id)
     {
-        _=await superHeroService.DeleteSuperHero(id);
+        bool? result = await DialogService.ShowMessageBox(
+            "Warning",
+            "Deleting can not be undone!",
+            yesText: "Delete!", cancelText: "Cancel");
+        state = result == null ? "Cancelled" : "Deleted!";
+
+        if(superHeroService.Heroes.Count>1)
+            _ = await superHeroService.DeleteSuperHero(id);
     }
 
     public void Dispose()
@@ -79,4 +96,13 @@ else
         navigationManager.NavigateTo($"/superhero/{id}");
     }
 
+    private async void OnButtonClicked()
+    {
+        bool? result = await DialogService.ShowMessageBox(
+            "Warning",
+            "Deleting can not be undone!",
+            yesText: "Delete!", cancelText: "Cancel");
+        state = result == null ? "Cancelled" : "Deleted!";
+        StateHasChanged();
+    }
 }
