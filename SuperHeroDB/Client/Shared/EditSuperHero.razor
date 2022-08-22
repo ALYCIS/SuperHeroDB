@@ -29,6 +29,7 @@ else
         <InputRadioGroup @bind-Value="Comic_Id" class="form-control">
             @foreach (var c in superHeroService.Comics)
             {
+                int c_id = c.Id;
                 <InputRadio Value="@c.Id" /> <span style="padding-left: 5px;">@c.Name</span> <br />
             }
         </InputRadioGroup>
@@ -54,30 +55,30 @@ else
         public int Id { get; set; }*@
     @*[Parameter]
         public SuperHeroDB.Shared.SuperHero hero { get; set; }*@
-    string CssShadow = "mud - elevation - 4 py - 8 px - 10 rounded white";
-    bool IsClick = false;
+   @* string CssShadow = "mud - elevation - 4 py - 8 px - 10 rounded white";
+    *@
     int IsModif = 0;
     int Comic_Id = 1;
     [Parameter]
     public SuperHeroDB.Shared.SuperHero Hero { get; set; } = new SuperHeroDB.Shared.SuperHero();
     @*protected override async Task OnInitializedAsync()*@
     @*protected override async Task OnParametersSetAsync()*@
-    protected override async Task OnParametersSetAsync()
-    {
-        await superHeroService.GetComics();
-        Comic_Id = Hero.Comic.Id;
-    }
+protected override async Task OnParametersSetAsync()
+{
+    await superHeroService.GetComics();
+    Comic_Id = (Hero.ComicId);
+}
 
-    async void HandleSubmit()
-    {
-        Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);
+async void HandleSubmit()
+{
+       @* Hero.Comic = superHeroService.Comics.FirstOrDefault(c => c.Id == Comic_Id);*@
+        Hero.ComicId = Comic_Id;
 
         if (Hero.Id == 0)
         {
             Console.WriteLine("Création!");
             await superHeroService.CreateSuperHero(Hero);
             Console.WriteLine(Hero.ToString());
-            IsClick = false;
             IsModif = 2;
         }
         else
@@ -86,7 +87,6 @@ else
             await superHeroService.UpdateSuperHero(Hero, Hero.Id);
             @*Hero.Id = Id +1;*@
             Hero.Id = 0;
-            IsClick = true;
             IsModif = 1;
         }
 

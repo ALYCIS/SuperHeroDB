@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @implements IDisposable
 @inject IJSRuntime JSRuntime
+@using SuperHeroDB.Shared
 
 <h3>Ma nouvelle page SuperHeros</h3>
 
@@ -13,7 +14,7 @@
 else
 {
     <table class="table">
-        <thead>
+        <thead> 
             <tr>
                 <th>Id</th>
                 <th>First Name</th>
@@ -33,7 +34,7 @@ else
                     <td>@hero.FirstName</td>
                     <td>@hero.LastName</td>
                     <td>@hero.HeroName</td>
-                    <td>@hero.Comic.Name</td>
+                    <td>@superHeroService.Comics.FirstOrDefault(c => c.Id==hero.ComicId).Name</td>
                     <td>
                         <button class="btn btn-info" @onclick="()=>ShowHero(hero.Id)"><i class="oi oi-zoom-in"></i></button>
                     </td>
@@ -62,8 +63,10 @@ else
     SuperHeroDB.Shared.SuperHero HVide = new SuperHeroDB.Shared.SuperHero();
     List<SuperHero> LHVide = new List<SuperHero> { new SuperHero() };
     //List<SuperHeroDB.Shared.SuperHero> heros = new List<SuperHeroDB.Shared.SuperHero>();
+
     protected override async Task OnInitializedAsync()
     {
+        await superHeroService.GetComics();
         _ = await superHeroService.GetSuperHeros();
         superHeroService.OnChange += StateHasChanged;
     }
@@ -74,6 +77,8 @@ else
 
         await JSRuntime.InvokeVoidAsync("console.log", HeroToEdit);
     }
+
+
     async void DeleteHero(int id)
     {
         bool? result = await DialogService.ShowMessageBox(

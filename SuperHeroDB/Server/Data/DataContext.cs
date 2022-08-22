@@ -9,22 +9,23 @@ namespace SuperHeroDB.Server.Data
 {
     public class DataContext:DbContext
     {
-        public DbSet<SuperHero> SuperHero { get; set; }
+        public DbSet<SuperHero> SuperHeros { get; set; }
         public DbSet<Comic> Comics { get; set; }
         public DataContext(DbContextOptions<DataContext> options):base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*base.OnModelCreating(modelBuilder);*/
-            modelBuilder.Entity<Comic>().HasData(
-                new Comic { Id=1, Name="Marvel"},
-                new Comic { Id=2, Name="DC"}
-                );
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Comic>().HasData(
-                new SuperHero { Id = 1, FirstName = "Peter", LastName = "Parker", HeroName = "Spiderman", Comic = new Comic { Id = 1, Name = "Marvel" } },
-                new SuperHero { Id = 2, FirstName = "Bruce", LastName = "Wayne", HeroName = "Batman", Comic = new Comic { Id = 2, Name = "DC" } }
+                new Comic { Id=1001, Name="Marvel"},
+                new Comic { Id=1002, Name ="DC" }
+                );
+  
+            modelBuilder.Entity<Comic>().HasData(
+                new SuperHero { Id = 1, FirstName = "Peter", LastName = "Parker", HeroName = "Spiderman", ComicId= 1001 },
+                new SuperHero { Id = 2, FirstName = "Bruce", LastName = "Wayne", HeroName = "Batman", ComicId = 1002}
                 );
         }
     }

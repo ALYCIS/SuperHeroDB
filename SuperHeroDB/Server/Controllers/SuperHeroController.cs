@@ -12,46 +12,34 @@ namespace SuperHeroDB.Server.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-        static List<Comic> comics = new List<Comic>
+        private static List<Comic> comics = new List<Comic>
         {
-            new Comic{Name="Marvel", Id=1},
-            new Comic{Name="DC", Id=2}
+            new Comic{Name="Marvel", Id=1001},
+            new Comic{Name="DC", Id=1002}
 
         };
 
-        static public List<SuperHero> heros = new List<SuperHero>
+        private static List<SuperHero> heros = new List<SuperHero>
         {
-            new SuperHero{Id=1,FirstName="Peter", LastName="Parker", HeroName="Spiderman", Comic=comics[0]},
-            new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", Comic=comics[1]}
+            new SuperHero{Id=1,FirstName="Peter", LastName="Parker", HeroName="Spiderman", ComicId=1001},
+            new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", ComicId=1002}
         };
+
 
         [HttpGet("comics")]
-        public IActionResult GetComics()
-        {
-            return Ok(comics);
-        }
+        public IActionResult GetComics() => Ok(comics);
 
         [HttpGet("comics/{id:int}")]
-        public IActionResult GetComicById(int Id)
-        {
-            return Ok(comics.FirstOrDefault(c=>c.Id==Id));
-        }
+        public IActionResult GetComicById(int Id)=> Ok(comics.FirstOrDefault(c => c.Id == Id));
 
         [HttpGet]
-        public IActionResult GetSuperHeros()
-        {
-            return Ok(heros);
-        }
+        public IActionResult GetSuperHeros() => Ok(heros);
 
         [HttpGet("{id}")]
         public IActionResult GetSingleSuperHero(int id)
         {
             var hero = heros.FirstOrDefault(h => h.Id == id);
-            if (hero == null)
-            {
-                return NotFound("Super Hero wasn't found. Too bad. :(");
-            }
-            return Ok(hero);
+            return hero == null ? NotFound("Super Hero wasn't found. Too bad. :(") : Ok(hero);
         }
         [HttpPost]
         public IActionResult CreateSuperHero(SuperHero hero)

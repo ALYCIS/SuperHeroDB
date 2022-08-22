@@ -25,7 +25,7 @@ else
                 <td>@hero.FirstName</td>
                 <td>@hero.LastName</td> 
                 <td>@hero.HeroName</td>
-                <td>@hero.Comic.Name</td>
+                <td>@isuperHeroService.Comics.FirstOrDefault(c => c.Id == Id+1000).Name</td>
             </tr>
         </tbody>
     </table>
@@ -41,14 +41,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         hero = await isuperHeroService.GetSuperHeroById(Id);
+        await isuperHeroService.GetComics();
     }
-
-}
-
-
-
-<h3>SuperHero</h3>
-
-@code {
 
 }

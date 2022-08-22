@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +11,12 @@ namespace SuperHeroDB.Shared
     public class SuperHero
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string HeroName { get; set; }
-        public Comic Comic { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string HeroName { get; set; } = string.Empty;
+
+        [ForeignKey("Comic")]
+        public int ComicId { get; set; }
 
         public SuperHero()
         {
@@ -20,13 +24,13 @@ namespace SuperHeroDB.Shared
             FirstName = "";
             LastName = "";
             HeroName = "";
-            Comic = new Comic() { Id = 0, Name = "" };
+            ComicId = 1001;
         }
 
 
         public override string ToString()
         {
-            return Id.ToString()+"/"+FirstName+"/"+LastName+"/"+HeroName+"/Comic = "+Comic.ToString();
+            return Id.ToString()+"/"+FirstName+"/"+LastName+"/"+HeroName+"/ComicID = "+ComicId.ToString();
         }
     }
 }
