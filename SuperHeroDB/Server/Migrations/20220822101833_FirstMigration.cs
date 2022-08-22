@@ -2,7 +2,7 @@
 
 namespace SuperHeroDB.Server.Migrations
 {
-    public partial class Initial : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

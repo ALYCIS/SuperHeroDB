@@ -9,8 +9,8 @@ using SuperHeroDB.Server.Data;
 namespace SuperHeroDB.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220821161615_Initial")]
-    partial class Initial
+    [Migration("20220822101833_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
