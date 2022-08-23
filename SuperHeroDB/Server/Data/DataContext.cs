@@ -25,7 +25,8 @@ namespace SuperHeroDB.Server.Data
   
             modelBuilder.Entity<Comic>().HasData(
                 new SuperHero { Id = 1, FirstName = "Peter", LastName = "Parker", HeroName = "Spiderman", ComicId= 1001 },
-                new SuperHero { Id = 2, FirstName = "Bruce", LastName = "Wayne", HeroName = "Batman", ComicId = 1002}
+                new SuperHero { Id = 2, FirstName = "Bruce", LastName = "Wayne", HeroName = "Batman", ComicId = 1002},
+                new SuperHero { Id = 3, FirstName = "Bruce", LastName = "Lee", HeroName = "BruceLee", ComicId = 1002}
                 );
         }
     }
