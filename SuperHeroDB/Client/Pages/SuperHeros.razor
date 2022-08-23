@@ -5,54 +5,56 @@
 @inject IJSRuntime JSRuntime
 @using SuperHeroDB.Shared
 
-<h3>Ma nouvelle page SuperHeros</h3>
+<div>
+    <h3>Ma nouvelle page SuperHeros</h3>
 
-@if (superHeroService.Heroes.Count == 0)
-{
-    <span>Loading Super Heros...</span>
-}
-else
-{
-    <table class="table">
-        <thead> 
-            <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Hero Name</th>
-                <th>Comic</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var hero in superHeroService.Heroes)
-            {
+    @if (superHeroService.Heroes.Count == 0)
+    {
+        <span>Loading Super Heros...</span>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@hero.Id</td>
-                    <td>@hero.FirstName</td>
-                    <td>@hero.LastName</td>
-                    <td>@hero.HeroName</td>
-                    <td>@superHeroService.Comics.FirstOrDefault(c => c.Id==hero.ComicId).Name</td>
-                    <td>
-                        <button class="btn btn-info" @onclick="()=>ShowHero(hero.Id)"><i class="oi oi-zoom-in"></i></button>
-                    </td>
-                    <td>
-                        <button class="btn btn-outline-warning" @onclick="()=>EditHero(hero.Id)"><i class="oi oi-pencil"></i></button>
-                    </td>
-                    <td>
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>DeleteHero(hero.Id)"><i class="oi oi-delete"></i></MudButton>
-                       @* <MudChip>@state</MudChip>*@
-                    </td>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Hero Name</th>
+                    <th>Comic</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    @*<EditSuperHero Id=heros.Count></EditSuperHero>*@
-    <EditSuperHero Hero="HeroToEdit"></EditSuperHero>
-}
+            </thead>
+            <tbody>
+                @foreach (var hero in superHeroService.Heroes)
+                {
+                    <tr>
+                        <td>@hero.Id</td>
+                        <td>@hero.FirstName</td>
+                        <td>@hero.LastName</td>
+                        <td>@hero.HeroName</td>
+                        <td>@superHeroService.Comics.FirstOrDefault(c => c.Id == hero.ComicId).Name</td>
+                        <td>
+                            <button class="btn btn-info" @onclick="()=>ShowHero(hero.Id)"><i class="oi oi-zoom-in"></i></button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-warning" @onclick="()=>EditHero(hero.Id)"><i class="oi oi-pencil"></i></button>
+                        </td>
+                        <td>
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="()=>DeleteHero(hero.Id)"><i class="oi oi-delete"></i></MudButton>
+                            @* <MudChip>@state</MudChip>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*<EditSuperHero Id=heros.Count></EditSuperHero>*@
+        <EditSuperHero Hero="HeroToEdit"></EditSuperHero>
+    }
 
+</div>
 
 @code {
     [Inject] private IDialogService DialogService { get; set; }
@@ -87,7 +89,7 @@ else
             yesText: "Delete!", cancelText: "Cancel");
         state = result == null ? "Cancelled" : "Deleted!";
 
-        if(superHeroService.Heroes.Count>1)
+        if (superHeroService.Heroes.Count > 1)
             _ = await superHeroService.DeleteSuperHero(id);
     }
 
@@ -110,4 +112,36 @@ else
         state = result == null ? "Cancelled" : "Deleted!";
         StateHasChanged();
     }
+}
+
+
+<div class="d-flex">
+    <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+        Edit rating
+    </MudButton>
+    <MudRating SelectedValue="rating" Disabled="true" Class="mt-1 ml-3" />
+</div>
+
+<MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3" /> Edit rating
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <p>How awesome are inline dialogs?</p>
+        <MudRating @bind-SelectedValue="rating" Class="mt-3" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Class="px-10">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private bool visible;
+    private int rating;
+    private void OpenDialog() => visible = true;
+    void Submit() => visible = false;
+
+    private DialogOptions dialogOptions = new() { FullWidth = true };
 }
