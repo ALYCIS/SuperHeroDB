@@ -15,14 +15,15 @@ namespace SuperHeroDB.Server.Controllers
         private static List<Comic> comics = new List<Comic>
         {
             new Comic{Name="Marvel", Id=1001},
-            new Comic{Name="DC", Id=1002}
-
+            new Comic{Name="DC", Id=1002},
+            new Comic{Name="Karate", Id=1003}
         };
 
         private static List<SuperHero> heros = new List<SuperHero>
         {
             new SuperHero{Id=1,FirstName="Peter", LastName="Parker", HeroName="Spiderman", ComicId=1001},
-            new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", ComicId=1002}
+            new SuperHero{Id=2,FirstName="Bruce", LastName="Wayne", HeroName="Batman", ComicId=1002},
+            new SuperHero{Id=3, FirstName = "Bruce", LastName = "Lee", HeroName = "BruceLee", ComicId = 1003}
         };
 
 

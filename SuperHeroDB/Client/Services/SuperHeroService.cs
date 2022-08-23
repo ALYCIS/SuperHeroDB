@@ -12,6 +12,12 @@ namespace SuperHeroDB.Client.Services
     {
         private readonly HttpClient _httpClient;
 
+        public SuperHeroService()
+        {
+            _= GetSuperHeros();
+            _= GetComics();
+        }
+
         public SuperHeroService(HttpClient httpClient)
         { 
             this._httpClient = httpClient;
