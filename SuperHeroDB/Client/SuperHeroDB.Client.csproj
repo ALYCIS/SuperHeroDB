@@ -5,9 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\AgenceComponent\ContactComponent.razor.css" />
+    <None Remove="Pages\AgenceComponent\FooterComponent.razor.css" />
+    <None Remove="Pages\AgenceComponent\MainComponent.razor.css" />
+    <None Remove="Pages\AgenceComponent\PossibilitiesComponent.razor.css" />
+    <None Remove="Pages\AgenceComponent\StepsComponent.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\AgenceComponent\ContactComponent.razor.css" />
+    <Content Include="Pages\AgenceComponent\FooterComponent.razor.css" />
+    <Content Include="Pages\AgenceComponent\MainComponent.razor.css" />
+    <Content Include="Pages\AgenceComponent\PossibilitiesComponent.razor.css" />
+    <Content Include="Pages\AgenceComponent\StepsComponent.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.17" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="5.2.0" />
+    <PackageReference Include="Radzen.Blazor" Version="4.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 

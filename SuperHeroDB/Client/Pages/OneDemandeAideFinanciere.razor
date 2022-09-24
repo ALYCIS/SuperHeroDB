@@ -1,0 +1,163 @@
+﻿@page "/dafs/{id:int}"
+
+@using SuperHeroDB.Shared
+
+@inject IDemandeAideFinanciereService DemandeAideFinanciereService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
+
+@if (D.Id == 0)
+{
+    <p> Chargement en cours...</p>
+}
+else
+{
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Services</th>
+                    <th>Nb Heure Demandee</th>
+                    <th>Nb Heure Accordee</th>
+                    <th>Cout Horraire</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> Architecte de Parcours Diagnostique </td>
+                    <td>
+                        <RadzenNumeric @bind-Value="@P1.NbHeureDemande" TValue="int" class=@((P1.NbHeureDemande > 5) ? "bg-danger" : "bg-success")></RadzenNumeric>
+                        @if (P1.NbHeureDemande > 5) 
+                        {
+                            <p class="text-danger">le maximum est 5</p>
+                        }
+                    </td>
+                    
+                    <td>@P1.NbHeureAccorde</td>
+                    <td>@P1.CoutHorraireAccorde</td>
+                    <td>@t1</td>
+                </tr>
+
+                <tr>
+                    <td> Architecte de Parcours Jury </td>
+                    <td>@P2.NbHeureDemande</td>
+                    <td>@P2.NbHeureAccorde</td>
+                    <td>@P2.CoutHorraireAccorde</td>
+                    <td>@t2</td>
+                </tr>
+
+                <tr>
+                    <td> Accompagnement Individuel </td>
+                    <td>@P3.NbHeureDemande</td>
+                    <td>@P3.NbHeureAccorde</td>
+                    <td>@P3.CoutHorraireAccorde</td>
+                    <td>@t3</td>
+                </tr>
+                <tr>
+                    <td> Accompagnement collectif </td>
+                    <td>@P4.NbHeureDemande</td>
+                    <td>@P4.NbHeureAccorde</td>
+                    <td>@P4.CoutHorraireAccorde</td>
+                    <td>@t4</td>
+                </tr>
+
+                <tr>
+                    <td> Actex formatifs </td>
+                    <td>@P5.NbHeureDemande</td>
+                    <td>@P5.NbHeureAccorde</td>
+                    <td>@P5.CoutHorraireAccorde</td>
+                    <td>@t5</td>
+                </tr>
+
+                <tr>
+                    <td> Jury </td>
+                    <td>@P6.NbHeureDemande</td>
+                    <td>@P6.NbHeureAccorde</td>
+                    <td>@P6.CoutHorraireAccorde</td>
+                    <td>@t6</td>
+                </tr>
+
+                <tr>
+                    <td> TOTAL </td>
+                    <td>@T1</td>
+                    <td>@T2</td>
+                    <td>@T3</td>
+                    <td>@T4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+}
+
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private string typeColor { get; set; } = "border-success";
+
+    public CoutParTypeDePrestation P1 { get; set; } = new CoutParTypeDePrestation();
+    public CoutParTypeDePrestation P2 { get; set; } = new CoutParTypeDePrestation();
+    public CoutParTypeDePrestation P3 { get; set; } = new CoutParTypeDePrestation();
+    public CoutParTypeDePrestation P4 { get; set; } = new CoutParTypeDePrestation();
+    public CoutParTypeDePrestation P5 { get; set; } = new CoutParTypeDePrestation();
+    public CoutParTypeDePrestation P6 { get; set; } = new CoutParTypeDePrestation();
+
+    decimal t1 = 0m;
+    decimal t2 = 0m;
+    decimal t3 = 0m;
+    decimal t4 = 0m;
+    decimal t5 = 0m;
+    decimal t6 = 0m;
+
+    int T1 = 0;
+    int T2 = 0;
+    decimal T3 = 0m;
+    decimal T4 = 0m;
+    decimal T5 = 0m;
+
+
+    public static SuperHeroDB.Shared.DemandeAideFinanciere D { get; set; } = new SuperHeroDB.Shared.DemandeAideFinanciere();
+
+    protected override void OnInitialized()
+    {
+
+        base.OnInitialized();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        D = await DemandeAideFinanciereService.GetDemande(Id);
+
+        P1 = D.PrestationsList.FirstOrDefault(p => p.Id == 1);
+        P2 = D.PrestationsList.FirstOrDefault(p => p.Id == 2);
+        P3 = D.PrestationsList.FirstOrDefault(p => p.Id == 3);
+        P4 = D.PrestationsList.FirstOrDefault(p => p.Id == 4);
+        P5 = D.PrestationsList.FirstOrDefault(p => p.Id == 5);
+        P6 = D.PrestationsList.FirstOrDefault(p => p.Id == 6);
+
+        t1 = P1.NbHeureAccorde * P1.CoutHorraireAccorde;
+        t2 = P2.NbHeureAccorde * P2.CoutHorraireAccorde;
+        t3 = P3.NbHeureAccorde * P3.CoutHorraireAccorde;
+        t4 = P4.NbHeureAccorde * P4.CoutHorraireAccorde;
+        t5 = P5.NbHeureAccorde * P5.CoutHorraireAccorde;
+        t6 = P6.NbHeureAccorde * P6.CoutHorraireAccorde;
+
+        T1 = P1.NbHeureDemande + P2.NbHeureDemande + P3.NbHeureDemande + P4.NbHeureDemande + P5.NbHeureDemande + P6.NbHeureDemande;
+        T2 = P1.NbHeureAccorde + P2.NbHeureAccorde + P3.NbHeureAccorde + P4.NbHeureAccorde + P5.NbHeureAccorde + P6.NbHeureAccorde;
+        T3 = P1.CoutHorraireAccorde + P2.CoutHorraireAccorde + P3.CoutHorraireAccorde + P4.CoutHorraireAccorde + P5.CoutHorraireAccorde + P5.CoutHorraireAccorde;
+        T4 = t1 + t2 + t3 + t4 + t5;
+
+        typeColor = (P1.NbHeureDemande < 5) ? "bg-danger" : "bg-success";
+
+    }
+}

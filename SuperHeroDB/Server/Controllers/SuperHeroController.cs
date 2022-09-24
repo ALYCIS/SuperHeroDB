@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SuperHeroDB.Shared;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,6 +29,24 @@ namespace SuperHeroDB.Server.Controllers
             new SuperHero{Id=3, FirstName = "Bruce", LastName = "Lee", HeroName = "BruceLee", ComicId = 1003}
         };
 
+        private static List<DemandeAideFinanciere> Demandes;
+        private static DemandeAideFinanciere[] DemandesArray;
+        private static List<DemandeAideFinanciereFils> test;
+
+        [HttpGet("dafs")]
+        public IActionResult GetDemandes()
+        {
+            
+            return Ok(test);
+
+        }
+
+        [HttpGet("dafs/{id:int}")]
+        public IActionResult GetDemandesById(int Id)
+        {
+   
+            return Ok(Demandes.FirstOrDefault(d => d.Id == Id));
+        }
 
         [HttpGet("comics")]
         public IActionResult GetComics() => Ok(comics);
@@ -82,6 +103,103 @@ namespace SuperHeroDB.Server.Controllers
             }
             
             return Ok(heros);
+        }
+
+        public SuperHeroController()
+        {
+            Demandes = new List<DemandeAideFinanciere>();
+            test = new List<DemandeAideFinanciereFils>();
+
+            using (var reader = new StreamReader(@"C:\Users\CISSE\Desktop\Blazor\SuperHeroDB\SuperHeroDB\Client\Services\data.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                /*csv.Configuration.Delimiter = ";";*/
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var record = csv.GetRecord<DemandeAideFinanciereFils>();
+                    DemandeAideFinanciere D = new DemandeAideFinanciere();
+                    D.Id = record.Id;
+                    D.Prenom = record.Prenom;
+                    D.Nom = record.Nom;
+
+                    D.CoutParTypeDePrestations.Add(new CoutParTypeDePrestation()
+                    {
+                        Id = record.IdVAEC,
+                        NbHeureDemande = record.NbHeureDemandeVAEC,
+                        NbHeureAccorde = record.NbHeureAccordeVAEC,
+                        CoutHorraireDemande = record.CoutHorraireDemandeVAEC,
+                        CoutHorraireAccorde = record.CoutHorraireAccordeVAEC,
+                        IdDemandeAideFinanciere = D.Id
+                    }
+                    );
+
+                    D.CoutParTypeDePrestations.Add(new CoutParTypeDePrestation()
+                    {
+                        Id = record.IdAPD,
+                        NbHeureDemande = record.NbHeureDemandeAPD,
+                        NbHeureAccorde = record.NbHeureAccordeAPD,
+                        CoutHorraireDemande = record.CoutHorraireDemandeAPD,
+                        CoutHorraireAccorde = record.CoutHorraireAccordeAPD,
+                        IdDemandeAideFinanciere = D.Id
+                    }
+                    );
+
+
+                    D.CoutParTypeDePrestations.Add(
+                    new CoutParTypeDePrestation()
+                    {
+                        Id = record.IdVAEI,
+                        NbHeureDemande = record.NbHeureDemandeVAEI,
+                        NbHeureAccorde = record.NbHeureAccordeVAEI,
+                        CoutHorraireDemande = record.CoutHorraireDemandeVAEI,
+                        CoutHorraireAccorde = record.CoutHorraireAccordeVAEI,
+                        IdDemandeAideFinanciere = D.Id
+                    }
+                    );
+
+                    D.CoutParTypeDePrestations.Add(
+                    new CoutParTypeDePrestation()
+                    {
+                        Id = record.IdJury,
+                        NbHeureDemande = record.NbHeureDemandeJury,
+                        NbHeureAccorde = record.NbHeureAccordeJury,
+                        CoutHorraireDemande = record.CoutHorraireDemandeJury,
+                        CoutHorraireAccorde = record.CoutHorraireAccordeJury,
+                        IdDemandeAideFinanciere = D.Id
+                    }
+                    );
+
+                    D.CoutParTypeDePrestations.Add(
+                   new CoutParTypeDePrestation()
+                   {
+                       Id = record.IdFormatif,
+                       NbHeureDemande = record.NbHeureDemandeFormatif,
+                       NbHeureAccorde = record.NbHeureAccordeFormatif,
+                       CoutHorraireDemande = record.CoutHorraireDemandeFormatif,
+                       CoutHorraireAccorde = record.CoutHorraireAccordeFormatif,
+                       IdDemandeAideFinanciere = D.Id
+                   }
+                   );
+
+                    D.CoutParTypeDePrestations.Add(
+                   new CoutParTypeDePrestation()
+                   {
+                       Id = record.IdAPJ,
+                       NbHeureDemande = record.NbHeureDemandeAPJ,
+                       NbHeureAccorde = record.NbHeureAccordeAPJ,
+                       CoutHorraireDemande = record.CoutHorraireDemandeAPJ,
+                       CoutHorraireAccorde = record.CoutHorraireAccordeAPJ,
+                       IdDemandeAideFinanciere = D.Id
+                   }
+                   );
+
+                    Demandes.Add(D);
+                    test.Add(record);
+                }
+                DemandesArray = Demandes.ToArray();
+            }
         }
     }
 }

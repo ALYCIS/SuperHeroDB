@@ -1,0 +1,66 @@
+﻿@page "/dafs"
+
+@using SuperHeroDB.Shared
+
+@inject IDemandeAideFinanciereService DemandeAideFinanciereService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
+
+
+@*<h3> Ma page demande aide financière </h3>*@
+
+@if (taille == 0)
+{
+    <p> Chargement en cours...</p>
+}
+else
+{
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Num Dossier</th>
+                    <th>Prenom</th>
+                    <th>Nom</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var d in DemandeAideFinanciereService.DemandeAides)
+                {
+                    <tr>
+                        <td>@d.Id</td>
+                        <td>@d.Prenom</td>
+                        <td>@d.Nom</td>
+                        <td>
+                            <button class="btn btn-info" @onclick="()=>ShowHero(d.Id)"><i class="oi oi-zoom-in"></i></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+
+@code{
+
+    int taille = 0;
+    int j = 0;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DemandeAideFinanciereService.GetAll();
+        taille = DemandeAideFinanciereService.DemandeAides.Count;
+        // await JSRuntime.InvokeVoidAsync("console.log", DemandeAideFinanciereService.DemandesAF.ToList());
+    }
+
+    public void ShowHero(int id)
+    {
+        navigationManager.NavigateTo($"/dafs/{id}");
+    }
+
+}
